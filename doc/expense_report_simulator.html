@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel Expense Report Simulator</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0.5em;
+    }
+    #game {
+      display: none;
+      width: 400px;
+      max-width: 90%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      text-align: center;
+    }
+    #progress-container {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    #progress-bar {
+      height: 15px;
+      width: 0%;
+      background-color: #007bff;
+      transition: width 0.5s;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 15px;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .flash {
+      animation: flashRed 0.6s ease-in-out 3;
+    }
+    @keyframes flashRed {
+      0%, 100% { background-color: #f5f5f5; }
+      50% { background-color: #ff4d4d; }
+    }
+  </style>
+</head>
+<body>
+  <div id="title-screen">
+    <h1>Travel Expense Report Simulator</h1>
+    <p><strong>Objective:</strong> Successfully prepare, submit, and get your expense report approved without losing your sanity.</p>
+    <button id="startBtn">Start Your Expense Report</button>
+  </div>
+
+  <div id="game">
+    <h2 id="step-title">Step 1: Prepare Your Expense Report</h2>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+    <p id="message">Let's get started.</p>
+    <button id="continueBtn">Continue</button>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById("startBtn");
+    const titleScreen = document.getElementById("title-screen");
+    const game = document.getElementById("game");
+    const stepTitle = document.getElementById("step-title");
+    const message = document.getElementById("message");
+    const btn = document.getElementById("continueBtn");
+    const progressBar = document.getElementById("progress-bar");
+
+    const steps = [
+      "Prepare Your Expense Report",
+      "Submit Your Expense Report",
+      "Approve Your Expense Report"
+    ];
+
+    const progresssteps = [
+      "⏳ Preparing Your Expense Report...",
+      "⏳ Submitting Your Expense Report...",
+      "⏳ Approving Your Expense Report..."
+    ];
+
+
+    let currentStep = 0;
+
+    function rand() {
+      return (Math.random() + (Date.now() % 1000) / 1000) % 1;
+    }
+
+    const mildMishaps = {
+      0: [
+        "Tried to login off-campus without VPN.",
+        "Browser Error! You forgot to clear your cache.",
+        "Your phone is not nearby for Duo Authentication.",
+        "Tried to enter 'banana' in the expense category field.",
+      ],
+      1: [
+        "Incorrect combo code.",
+        "You forgot to enter your flight number.",
+        "You forgot to attach your receipt."
+      ],
+      2: [
+        "Returned: You entered a full day per diem rate on your travel day (how dare you).",
+        "Returned: Did not provide sufficient evidence to be reimbursed for membership fees.",
+        "Your Department Head is on vacation.",
+        "You have a new business manager who has no idea what they are doing."
+      ]
+    };
+
+    const catastrophicMishaps = {
+      0: [
+        "You logged into OneUSG Connect instead of Financial Mgmt System (Why are there multiple links in OneSource? Great question.)",
+        "Expense system update initiated mid-upload. Everything vanished.",
+        "Your travel destination is not listed as an option."
+      ],
+      1: [
+        "You booked your hotel through a third-party website.",
+        "You booked your international travel on a non-US carrier.",
+        "You booked an AirBnB for domestic travel.",
+      ],
+      2: [
+        "Travel policy retroactively updated.",
+        "Funding source is not approved for travel expenses.",
+        "You never submitted your travel authorization.",
+        "The fiscal year has ended."
+      ]
+    };
+
+    function randomCompletionTime() {
+      const times = ["It only wasted half a day.", "It only wasted 3 coffee breaks.", "Now you have nothing to do during your faculty meeting.", "However, it took too long to get submitted and now you’re too far past your trip return date. Your reimbursement will be taxed by the IRS.", "However, you used your personal vehicle when you should have rented a car; you will be reimbursed at the lower mileage rate.", "However, you did not obtain a Hotel Tax Exemption for GA hotels; you will not be reimbursed for your hotel stay.","It only took an equivalent of 0.2 FTE."];
+      return times[Math.floor(rand() * times.length)];
+    }
+
+    function updateProgress() {
+      const progressPercent = (currentStep / steps.length) * 100;
+      progressBar.style.width = Math.min(progressPercent, 95) + "%";
+    }
+
+    function resetGame() {
+      currentStep = 0;
+      stepTitle.textContent = "Step 1: " + steps[0];
+      message.textContent = "Let's get started.";
+      btn.textContent = "Continue";
+      progressBar.style.width = "0%";
+      document.body.classList.remove("flash");
+    }
+
+    startBtn.addEventListener("click", () => {
+      titleScreen.style.display = "none";
+      game.style.display = "block";
+      resetGame();
+    });
+
+    btn.addEventListener("click", () => {
+      document.body.classList.remove("flash");
+
+      // Handle restart buttons
+      if (btn.textContent === "Start Over" || btn.textContent === "Try Again?") {
+        resetGame();
+        return;
+      }
+
+      btn.disabled = true;
+      const phase = progresssteps[currentStep];
+      message.textContent = `${phase}`
+
+      setTimeout(() => {
+        let failureRoll = rand();
+        if (failureRoll < 0.35) {
+          if (rand() < 0.4) { // catastrophic
+            document.body.classList.add("flash");
+            const problem = catastrophicMishaps[currentStep][Math.floor(rand() * catastrophicMishaps[currentStep].length)];
+            message.innerHTML = `💥 ${problem}`;
+            currentStep = 0;
+            btn.textContent = "Start Over";
+            stepTitle.textContent = "Step 1: " + steps[0];
+            updateProgress();
+            btn.disabled = false;
+          } else { // mild
+            const problem = mildMishaps[currentStep][Math.floor(rand() * mildMishaps[currentStep].length)];
+            message.innerHTML = `⚠️ ${problem}`;
+            if (currentStep > 0) currentStep--;
+            stepTitle.textContent = "Step " + (currentStep + 1) + ": " + steps[currentStep];
+            updateProgress();
+            btn.disabled = false;
+          }
+        } else { // success
+          currentStep++;
+          if (currentStep >= steps.length) {
+            message.textContent = "🎉 Approved! " + randomCompletionTime();
+            stepTitle.textContent = "🏆 Approved!";
+            btn.textContent = "Try Again?";
+            progressBar.style.width = "100%";
+          } else {
+            message.textContent = "✅ Success!";
+            stepTitle.textContent = "Step " + (currentStep + 1) + ": " + steps[currentStep];
+            updateProgress();
+            btn.textContent = "Continue";
+          }
+          btn.disabled = false;
+        }
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
