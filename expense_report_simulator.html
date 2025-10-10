@@ -71,7 +71,7 @@
 <body>
   <div id="title-screen">
     <h1>Travel Expense Report Simulator</h1>
-    <p><strong>Objective:</strong> Successfully prepare, submit, and get your expense report approved without losing your sanity.</p>
+    <p><strong>Objective:</strong> Successfully prepare, submit, and get your expense report approved, all without losing your sanity.</p>
     <button id="startBtn">Start Your Expense Report</button>
   </div>
 
@@ -122,7 +122,8 @@
       1: [
         "Incorrect combo code.",
         "You forgot to enter your flight number.",
-        "You forgot to attach your receipt."
+        "You forgot to attach your receipt.",
+        "Must provide 1-page justification for why you tipped the Uber Driver $3."
       ],
       2: [
         "Returned: You entered a full day per diem rate on your travel day (how dare you).",
@@ -152,7 +153,7 @@
     };
 
     function randomCompletionTime() {
-      const times = ["It only wasted half a day.", "It only wasted 3 coffee breaks.", "Now you have nothing to do during your faculty meeting.", "However, it took too long to get submitted and now you’re too far past your trip return date. Your reimbursement will be taxed by the IRS.", "However, you used your personal vehicle when you should have rented a car; you will be reimbursed at the lower mileage rate.", "However, you did not obtain a Hotel Tax Exemption for GA hotels; you will not be reimbursed for your hotel stay.","It only took an equivalent of 0.2 FTE."];
+      const times = ["It only wasted half a day.", "Now you need to submit your Foundation Funds reimbursement.", "Now you have nothing to do during your faculty meeting.", "However, it took too long to get submitted and now you’re too far past your trip return date. Your reimbursement will be taxed by the IRS.", "However, you used your personal vehicle when you should have rented a car; you will be reimbursed at the lower mileage rate.", "However, you did not obtain a Hotel Tax Exemption for GA hotels; you will not be reimbursed for your hotel stay.","It only took an equivalent of 0.2 FTE."];
       return times[Math.floor(rand() * times.length)];
     }
 
@@ -191,8 +192,8 @@
 
       setTimeout(() => {
         let failureRoll = rand();
-        if (failureRoll < 0.35) {
-          if (rand() < 0.4) { // catastrophic
+        if (failureRoll < 0.6) {
+          if (rand() < 0.33) { // catastrophic
             document.body.classList.add("flash");
             const problem = catastrophicMishaps[currentStep][Math.floor(rand() * catastrophicMishaps[currentStep].length)];
             message.innerHTML = `💥 ${problem}`;
