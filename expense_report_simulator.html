@@ -117,12 +117,14 @@
         "Tried to login off-campus without VPN.",
         "Browser Error! You forgot to clear your cache.",
         "Your phone is not nearby for Duo Authentication.",
-        "Tried to enter 'banana' in the expense category field.",
+        "Cannot login. EITS conducting network maintenance.",
+        "Could not upload receipt. File name too long."
       ],
       1: [
         "Incorrect combo code.",
         "You forgot to enter your flight number.",
         "You forgot to attach your receipt.",
+        "Did not set up the correct delegate in OneSource.",
         "Must provide 1-page justification for why you tipped the Uber Driver $3."
       ],
       2: [
@@ -192,7 +194,7 @@
 
       setTimeout(() => {
         let failureRoll = rand();
-        if (failureRoll < 0.6) {
+        if (failureRoll < 0.5) {
           if (rand() < 0.33) { // catastrophic
             document.body.classList.add("flash");
             const problem = catastrophicMishaps[currentStep][Math.floor(rand() * catastrophicMishaps[currentStep].length)];
